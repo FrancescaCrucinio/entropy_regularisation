@@ -18,5 +18,6 @@ Dependencies: a recent version of R with packages:
 * ks
 * ggplot2
 * tictoc
+* readxl
 * incidental (for 1918 pandemic flu example)
-* 
+* fDKDE (available [here](https://researchers.ms.unimelb.edu.au/~aurored/links.html#Code); for deconvolution)
