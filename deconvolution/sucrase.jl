@@ -114,7 +114,7 @@ R"""
     data <- data.frame(x = x, y = c(muKDEy, fdec_hPI, KDE_wgf$estimate), g = factor(g))
     p <- ggplot(data, aes(x, y, color = g)) +
     geom_line(size = 2) +
-    scale_color_manual(values = c("gray", "red", "blue"), labels=c(expression(paste("KDE ", mu)), "fdec-hPI", "WGF")) +
+    scale_color_manual(values = c("gray", "red", "blue"), labels=c(expression(paste("KDE ", mu)), "DKDEpi", "WGF")) +
     theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
     # ggsave("sucrase.eps", p, height = 4)
 """

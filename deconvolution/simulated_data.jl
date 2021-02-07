@@ -124,7 +124,7 @@ R"""
     data <- data.frame(x = x, y = c(tdensity, outcome$naive_KDE, outcome$DKDE_nonrescaledPI, outcome$DKDE_rescaledCV, KDE_wgf$estimate), g = factor(g))
     p <- ggplot(data, aes(x, y, color = g)) +
     geom_line(size = 2) +
-    scale_color_manual(values = c("black", "gray", "red", "orange", "blue"), labels=c(expression(rho(x)), expression(paste("KDE ", mu)), "fdec-hPI", "fdec-hCV", "WGF")) +
+    scale_color_manual(values = c("black", "gray", "red", "orange", "blue"), labels=c(expression(rho(x)), expression(paste("KDE ", mu)), "DKDEpi", "DKDEcv", "WGF")) +
     theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
     # ggsave("simulated_data.eps", p,  height=4)
 

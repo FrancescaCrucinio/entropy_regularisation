@@ -22,6 +22,9 @@ K(x, y) = 0.595*pdf.(Normal(8.63, 2.56), y .- x) +
 R"""
 library(incidental)
 library(tictoc)
+Sys.setenv("LANGUAGE"="En")
+Sys.setlocale("LC_ALL", "English")
+
 # death counts
 death_counts <- spanish_flu$Philadelphia
 
@@ -142,18 +145,38 @@ library(ggplot2)
 g <- rep(1:3, , each = length(spanish_flu$Date));
 data <- data.frame(x = rep(spanish_flu$Date, times = 3), y = c($rhoCounts[100,]/sum($rhoCounts[100,]), Philadelphia_model$Ihat/sum(Philadelphia_model$Ihat), $KDEyWGF[$Niter, ]), g = factor(g))
 p1 <- ggplot(data, aes(x, y, color = g)) +
-geom_line(size = 1) +
-scale_color_manual(values = c("red", "blue", "green"), labels=c("RL", "RIDE", "WGF")) +
-theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
+geom_line(size = 2) +
+scale_color_manual(values = c("gray", "red", "blue"), labels=c("RL", "RIDE", "WGF")) +
+theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3, , legend.position="none")
 # ggsave("flu1918_reconstruction.eps", p1,  height=4)
 
 # reconstructed death counts
 g <- rep(1:4, , each = length(spanish_flu$Date));
 data <- data.frame(x = rep(spanish_flu$Date, times = 4), y = c($RLyRec, Philadelphia_model$reported, Philadelphia_model$Chat, $KDEyRec*sum(Philadelphia_model$reported)), g = factor(g))
 p2 <- ggplot(data, aes(x, y, color = g)) +
-geom_point(data = data[data$g==1, ], size = 2, shape = 3) +
-geom_line(data = data[data$g!=1, ], size = 1) +
-scale_color_manual(values = c("black", "red", "blue", "green"), labels=c("recorded", "RL", "RIDE", "WGF")) +
-theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
+geom_line(data = data[data$g!=1, ], size = 2) +
+geom_point(data = data[data$g==1, ], size = 3, shape = 3) +
+scale_color_manual(values = c("black", "gray", "red", "blue"), labels=c("recorded", "RL", "RIDE", "WGF")) +
+theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3, legend.position="none")
 # ggsave("flu1918_reconv.eps", p2,  height=4)
+
+# save legend separately
+p3 <- ggplot(data, aes(x, y, color = g)) +
+geom_line(data = data[data$g!=1, ], size = 2) +
+geom_point(data = data[data$g==1, ], size = 3, shape = 3) +
+scale_color_manual(values = c("black", "gray", "red", "blue"), labels=c("recorded", "RL", "RIDE", "WGF")) +
+theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3, legend.position="bottom")
+
+g_legend <- function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)
+}
+
+mylegend <- g_legend(p3)
+library(grid)
+grid.draw(mylegend)
+
+# ggsave("flu1918_legend.eps", mylegend,  height=2)
 """

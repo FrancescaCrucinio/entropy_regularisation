@@ -89,9 +89,9 @@ end
 dt = 1e-02;
 Niter = 100;
 # samples from h(y)
-M = 5000;
+M = 10000;
 # number of particles
-Nparticles = 5000;
+Nparticles = 10000;
 # regularisation parameter
 alpha = 0.0026;
 # variance of normal describing alignment
