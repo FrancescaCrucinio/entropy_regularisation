@@ -110,24 +110,25 @@ R"""
     p1 <- ggplot(data, aes(x, y, group = factor(g), color = factor(g), linetype = factor(g), shape = symbol)) +
     geom_line(size = 2, aes(linetype = factor(g))) +
     geom_point(size=4) +
-    scale_colour_manual(values = c("blue", "red"), labels=c("SMC-EMS", "WGF")) +
+    scale_colour_manual(values = c("red", "blue"), labels=c("SMC-EMS", "WGF")) +
     scale_linetype_manual(values = c("longdash", "dotdash"), labels=c("SMC-EMS", "WGF")) +
     theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(),
         aspect.ratio = 2/3, legend.key.size = unit(1, "cm"), plot.margin=grid::unit(c(0,0,0,0), "mm"))
-    # ggsave("mixture_runtime_vs_mise.eps", p1, , height = 4)
+    # ggsave("mixture_runtime_vs_mise.eps", p1, height = 4)
 
     # boxplot for smoothness
     symbol <- rep(c("N=100", "N=500", "N=1000", "N=5000", "N=10000", "N=100", "N=500", "N=1000", "N=5000", "N=10000"), each= 100)
     g <- rep(1:2, , each= $groups*100)
     runtime <- rep(c($tSMC, $tWGF), each = 100)
     runtime <- round(runtime, 2)
-    data <- data.frame(x = factor(runtime), y = c(c($qdistSMC), c($qdistWGF)), g = g);
+    data <- data.frame(x = runtime, y = c(c($qdistSMC), c($qdistWGF)), g = g);
     data$symbol <- factor(symbol, levels = c("N=100", "N=500", "N=1000", "N=5000", "N=10000"))
     p2 <- ggplot(data) +
     geom_boxplot(lwd = 1, alpha = 0.2, aes(x = x, y=y, color = symbol, linetype = factor(g), fill = symbol)) +
     scale_linetype_manual(values = c("solid", "dotted"), labels=c("SMC-EMS", "WGF")) +
     scale_y_log10(breaks = scales::trans_breaks("log10", function(x) 10^x), labels = scales::trans_format("log10", scales::math_format(10^.x))) +
-    theme(axis.title=element_blank(), text = element_text(size=40), legend.title=element_blank(),
+    scale_x_log10(breaks = scales::trans_breaks("log10", function(x) 10^x), labels = scales::trans_format("log10", scales::math_format(10^.x))) +
+    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(),
         plot.margin=grid::unit(c(0,0,0,0), "mm"))
     # ggsave("mixture_runtime_vs_mse.eps", p2)
 
@@ -144,7 +145,7 @@ R"""
     # ggsave("mixture_entropy.eps", p3,  height=5)
 """
 # #
-# save("smc_vs_wgf10Oct2020.jld", "alpha", alpha, "epsilon", epsilon, "diagnosticsWGF", diagnosticsWGF,
+# save("smc_vs_wgf8Feb2021.jld", "alpha", alpha, "epsilon", epsilon, "diagnosticsWGF", diagnosticsWGF,
 #      "diagnosticsSMC", diagnosticsSMC, "dt", dt, "tSMC", tSMC, "tWGF", tWGF,
 #      "Nparticles", Nparticles, "Niter", Niter, "qdistWGF", qdistWGF,
 #      "qdistSMC", qdistSMC);

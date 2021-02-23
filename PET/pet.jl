@@ -93,7 +93,10 @@ M = 10000;
 # number of particles
 Nparticles = 10000;
 # regularisation parameter
-alpha = 0.0026;
+# for N = 5000
+# alpha = 0.0026;
+# for N = 10000
+alpha = 0.008;
 # variance of normal describing alignment
 sigma = 0.02;
 # sample from μ
