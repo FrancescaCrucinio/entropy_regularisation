@@ -6,7 +6,7 @@ using Statistics;
 using StatsBase;
 using KernelEstimator;
 using Random;
-using JLD;
+using StatsPlots;
 using Distances;
 using RCall;
 @rimport ks as rks
@@ -29,7 +29,7 @@ K(x, y) = pdf.(Normal(x, sqrt(sigmaK)), y);
 # dt and number of iterations
 dt = 1e-03;
 Niter = 1000;
-# samples from h(y)
+# samples from μ(y)
 M = 500;
 # values at which evaluate KDE
 KDEx = range(0, stop = 1, length = 1000);
@@ -82,21 +82,5 @@ for i=1:size(x0, 1)
     E[:, i] = mapslices(psi, KDEyWGF, dims = 2);
 end
 
-iterations = repeat(2:Niter, outer=[6, 1]);
-# plot
-R"""
-    library(ggplot2)
-    library(cowplot)
-    library(scales)
-    glabels <- c(expression(delta[0]), expression(delta[0.5]), expression(delta[1]),
-        "U(0, 1)", expression(N(m, sigma[alpha]^2)), expression(N(m, sigma[alpha]^2+ epsilon)))
-    g <- rep(1:6, , each= $Niter -1)
-    data <- data.frame(x = $iterations, y = c($E), g = g);
-    p <- ggplot(data, aes(x, y, group = factor(g), color = factor(g))) +
-    geom_line(size = 2) +
-    scale_colour_discrete(labels=glabels) +
-    scale_y_log10(labels = trans_format("log10", math_format(10^.x))) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), legend.position="bottom", aspect.ratio = 2/4) +
-    guides(colour = guide_legend(nrow = 1))
-    ggsave("initial_distribution_E.eps", p, height=5)
-"""
+p = plot(2:Niter, E, yaxis = :log, lw = 2, labels = ["delta 0" "delta 0.5" "delta 1" "U(0, 1)" "solution" "solution + noise"], legend = :outerright)
+# savefig(p,"initial_distribution_E.pdf")

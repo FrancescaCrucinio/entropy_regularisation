@@ -85,29 +85,5 @@ plot!(p1, KDEx, f_approx, lw = 2, label = ["alpha = 0.01" "alpha = 0.1" "alpha =
 # savefig(p1,"at_rho.pdf")
 
 p2 = plot(1:Niter, E[:, 1], lw = 0, legendfontsize = 10, tickfontsize = 8, label = "")
-plot!(p2, 1:Niter, E, lw = 2, label = ["alpha = 0.01" "alpha = 0.1" "alpha = 0.5" "alpha = 1" "alpha = 1.1" "alpha = 1.5"])
+plot!(p2, 1:Niter, E, lw = 2, label = "")
 # savefig(p2,"at_E.pdf")
-
-# plot
-R"""
-    library(ggplot2)
-    glabels <- c(expression(paste(alpha, "=", 0.01)), expression(paste(alpha, "=", 0.1)),
-        expression(paste(alpha, "=", 0.5)), expression(paste(alpha, "=", 1)),
-        expression(paste(alpha, "=", 1.1)), expression(paste(alpha, "=", 1.5)));
-    g <- rep(1:6, , each= $Niter)
-    data <- data.frame(x = $iterations, y = c($E), g = g);
-    p1 <- ggplot(data, aes(x, y, group = factor(g), color = factor(g))) +
-    geom_line(size = 2) +
-    scale_colour_discrete(labels=glabels) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
-    x = rep($KDEx, 7);
-    g <- rep(1:7, , each= length($KDEx));
-    glabels <- c(expression(rho(x)), glabels);
-    data <- data.frame(x = x, y = c($solution, c($f_approx)), g = g)
-    p2 <- ggplot(data, aes(x, y, group = factor(g), color = factor(g))) +
-    geom_line(size = 2) +
-    scale_colour_manual(values = c("black", "#F8766D", "#B79F00", "#00BA38", "#00BFC4", "#619CFF", "#F564E3"), labels=glabels) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
-    # ggsave("at_E.eps", p1,  height=5)
-    # ggsave("at_rho.eps", p2,  height=5)
-"""
