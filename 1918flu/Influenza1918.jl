@@ -22,8 +22,6 @@ K(x, y) = 0.595*pdf.(Normal(8.63, 2.56), y .- x) +
 R"""
 library(incidental)
 library(tictoc)
-Sys.setenv("LANGUAGE"="En")
-Sys.setlocale("LC_ALL", "English")
 
 # death counts
 death_counts <- spanish_flu$Philadelphia
@@ -95,13 +93,7 @@ end
 # check convergence
 KDEyWGF = mapslices(phi, x, dims = 2);
 EWGF = mapslices(psi, KDEyWGF, dims = 2);
-p1 = plot(EWGF);
-# result
-p2 = plot(KDEx, KDEyWGF[Niter, :]);
-# deaths distribution
-plot!(p2, KDEx .- 9, muKDEy);
-p = plot(p1, p2, layout =(2, 1));
-p
+p = plot(EWGF);
 
 # RL
 # initial distribution

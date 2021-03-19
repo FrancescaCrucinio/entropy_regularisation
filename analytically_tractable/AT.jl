@@ -69,7 +69,7 @@ f_approx = zeros(length(KDEx), length(alpha));
 for i=1:length(alpha)
     x0 = 0.5 .+ randn(1, Nparticles)/10;
     # run WGF
-    x, _ =  wgf_AT_tamed(Nparticles, dt, Niter, alpha[i], x0, M, 0.5);
+    x, _ =  wgf_AT_tamed(Nparticles, dt, Niter, alpha[i], x0, M);
     a = alpha[i];
     KDEyWGF = mapslices(phi, x, dims = 2);
     f_approx[:, i] = KDEyWGF[end, :];
@@ -78,6 +78,16 @@ end
 
 iterations = repeat(1:Niter, outer=[6, 1]);
 solution = rho.(KDEx);
+
+
+p1 = plot(KDEx, solution, lw = 2, legendfontsize = 10, tickfontsize = 8, color = :black, label = "true density")
+plot!(p1, KDEx, f_approx, lw = 2, label = ["alpha = 0.01" "alpha = 0.1" "alpha = 0.5" "alpha = 1" "alpha = 1.1" "alpha = 1.5"])
+# savefig(p1,"at_rho.pdf")
+
+p2 = plot(1:Niter, E[:, 1], lw = 0, legendfontsize = 10, tickfontsize = 8, label = "")
+plot!(p2, 1:Niter, E, lw = 2, label = ["alpha = 0.01" "alpha = 0.1" "alpha = 0.5" "alpha = 1" "alpha = 1.1" "alpha = 1.5"])
+# savefig(p2,"at_E.pdf")
+
 # plot
 R"""
     library(ggplot2)

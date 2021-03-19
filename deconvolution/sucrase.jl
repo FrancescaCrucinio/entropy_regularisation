@@ -27,8 +27,8 @@ sucrase_Carter1981 <- read_excel("deconvolution/sucrase_Carter1981.xlsx");
 W <- sucrase_Carter1981$Pellet;
 n <- length(W);
 
-# Laplace error distribution
-errortype="Lap";
+# Normal error distribution
+errortype="norm";
 varU = var(W)/4;
 sigU = sqrt(varU/2);
 
