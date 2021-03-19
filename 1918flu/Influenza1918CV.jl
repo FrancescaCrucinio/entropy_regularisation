@@ -71,11 +71,9 @@ M = 500;
 # time discretisation
 dt = 1e-1;
 # number of iterations
-Niter = 5000;
-# initial distribution
-x0 = sample(muSample, M, replace = true) .- 9;
+Niter = 3000;
 # regularisation parameter
-alpha = range(0.001, stop = 0.07, length = 10);
+alpha = range(0.001, stop = 0.01, length = 10);
 
 # divide muSample into groups
 L = 5;
@@ -87,10 +85,12 @@ muSample = reshape(muSample, (L, Int64(length(muSample)/L)));
 E = zeros(length(alpha), L);
 Threads.@threads for i=1:length(alpha)
     @simd for l=1:L
-        # get reduced sample
         muSampleL = muSample[1:end .!= l, :];
+        muSampleL = muSampleL[:];
+        # initial distribution
+        x0 = sample(muSampleL, Nparticles, replace = false) .- 9;
         # WGF
-        x = wgf_flu_tamed(Nparticles, dt, Niter, alpha[i], x0, muSample, M, 0.5);
+        x = wgf_flu_tamed(Nparticles, dt, Niter, alpha[i], x0, muSample, M);
         # KL
         a = alpha[i];
         KDE = phi(x[Niter, :]);

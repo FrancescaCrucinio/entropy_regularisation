@@ -263,9 +263,8 @@ INPUTS
 'x0' user selected initial distribution
 'muSample' sample from μ
 'M' number of samples from μ(y) to be drawn at each iteration
-'a' parameter for tamed Euler scheme
 =#
-function wgf_flu_tamed(N, dt, Niter, alpha, x0, muSample, M, a)
+function wgf_flu_tamed(N, dt, Niter, alpha, x0, muSample, M)
    # initialise a matrix x storing the particles
    x = zeros(Niter, N);
    # initial distribution is given as input:
@@ -273,7 +272,7 @@ function wgf_flu_tamed(N, dt, Niter, alpha, x0, muSample, M, a)
 
    for n=1:(Niter-1)
        # get samples from h(y)
-       y = sample(muSample, M, replace = true);
+       y = sample(muSample, M, replace = false);
        # Compute h^N_{n}
        hN = zeros(M, 1);
        for j=1:M
@@ -289,7 +288,7 @@ function wgf_flu_tamed(N, dt, Niter, alpha, x0, muSample, M, a)
            drift[i] = mean(gradient./hN);
        end
        # update locations
-       x[n+1, :] = x[n, :] .+ dt * drift./(1 .+ Niter^(-a) * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
+       x[n+1, :] = x[n, :] .+ dt * drift./(1 .+ dt * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
    end
    return x
 end

@@ -17,7 +17,6 @@ include("diagnostics.jl")
 # set seed
 Random.seed!(1234);
 
-# data for anaytically tractable example
 # data for gaussian mixture example
 rho(x) = pdf.(Normal(0.3, 0.015), x)/3 + 2*pdf.(Normal(0.5, 0.043), x)/3;
 mu(x) = 2*pdf.(Normal(0.3, sqrt(0.043^2 + 0.045^2)), x)/3 +
@@ -28,7 +27,7 @@ K(x, y) = pdf.(Normal(x, 0.045), y);
 # dt and number of iterations
 dt = 1e-03;
 Niter = 100;
-# samples from h(y)
+# samples from μ(y)
 M = 1000;
 # number of particles
 Nparticles = [100; 500; 1000; 5000; 10000];
@@ -62,7 +61,7 @@ Threads.@threads for i=1:length(Nparticles)
         # initial distribution
         x0SMC = rand(1, Nparticles[i]);
         x0WGF = 0.5*ones(1, Nparticles[i]);
-        # sample from h(y)
+        # sample from μ(y)
         muSample = Ysample_gaussian_mixture(100000);
         # run SMC
         trepSMC[j] = @elapsed begin
