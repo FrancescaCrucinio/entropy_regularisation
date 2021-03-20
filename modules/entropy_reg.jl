@@ -87,7 +87,7 @@ function wgf_gaussian_mixture_tamed(N, dt, Niter, alpha, x0, muSample, M)
             drift[i] = mean(gradient./hN);
         end
         # update locations
-        x[n+1, :] = x[n, :] .+  dt * drift./(1 .+ Niter^(-a) * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
+        x[n+1, :] = x[n, :] .+  dt * drift./(1 .+ dt * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
     end
     return x
 end
