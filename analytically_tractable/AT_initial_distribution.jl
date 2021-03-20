@@ -82,5 +82,5 @@ for i=1:size(x0, 1)
     E[:, i] = mapslices(psi, KDEyWGF, dims = 2);
 end
 
-p = plot(2:Niter, E, yaxis = :log, lw = 2, labels = ["delta 0" "delta 0.5" "delta 1" "U(0, 1)" "solution" "solution + noise"], legend = :outerright)
+p = plot(2:Niter, E, yaxis = :log, lw = 2, labels = [L"\delta_0" "delta 0.5" "delta 1" "U(0, 1)" "solution" "solution + noise"], legend = :outerright)
 # savefig(p,"initial_distribution_E.pdf")

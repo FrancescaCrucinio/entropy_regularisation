@@ -80,7 +80,7 @@ iterations = repeat(1:Niter, outer=[6, 1]);
 solution = rho.(KDEx);
 
 
-p1 = plot(KDEx, solution, lw = 2, legendfontsize = 10, tickfontsize = 8, color = :black, label = "true density")
+p1 = plot(KDEx, solution, lw = 2, legendfontsize = 12, tickfontsize = 10, color = :black, label = "true density")
 plot!(p1, KDEx, f_approx, lw = 2, label = ["alpha = 0.01" "alpha = 0.1" "alpha = 0.5" "alpha = 1" "alpha = 1.1" "alpha = 1.5"])
 # savefig(p1,"at_rho.pdf")
 

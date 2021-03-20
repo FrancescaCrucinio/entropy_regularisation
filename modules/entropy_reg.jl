@@ -53,6 +53,45 @@ function wgf_AT_tamed(N, dt, Niter, alpha, x0, M)
     return x, drift
 end
 
+#= WGF for gaussian mixture
+OUTPUTS
+1 - particle locations
+2 - drift evolution
+INPUTS
+'N' number of particles
+'dt' discretisation step
+'Niter' number of iterations
+'alpha' regularisation parameter
+'x0' user selected initial distribution
+'muSample' sample from μ(y)
+'M' number of samples from μ(y) to be drawn at each iteration
+=#
+function wgf_gaussian_mixture_tamed(N, dt, Niter, alpha, x0, muSample, M)
+    # initialise a matrix x storing the particles
+    x = zeros(Niter, N);
+    # initial distribution is given as input:
+    x[1, :] = x0;
+
+    for n=1:(Niter-1)
+        # samples from h(y)
+        y = sample(muSample, M, replace = false);
+        # Compute h^N_{n}
+        hN = zeros(M, 1);
+        for j=1:M
+            hN[j] = mean(pdf.(Normal.(x[n, :], 0.045), y[j]));
+        end
+        # gradient and drift
+        drift = zeros(N, 1);
+        for i=1:N
+            gradient = pdf.(Normal.(x[n, i], 0.045), y) .* (y .- x[n, i])/(0.045^2);
+            drift[i] = mean(gradient./hN);
+        end
+        # update locations
+        x[n+1, :] = x[n, :] .+  dt * drift./(1 .+ Niter^(-a) * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
+    end
+    return x
+end
+
 #= WGF for deconvolution with Normal error
 OUTPUTS
 1 - particle locations
@@ -291,46 +330,6 @@ end
 #         end
 #         # update locations
 #         x[n+1, :] = x[n, :] .+ dt * drift./(1 .+ Niter^(-a) * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
-#     end
-#     return x
-# end
-
-# #= WGF for gaussian mixture
-# OUTPUTS
-# 1 - particle locations
-# 2 - drift evolution
-# INPUTS
-# 'N' number of particles
-# 'dt' discretisation step
-# 'Niter' number of iterations
-# 'alpha' regularisation parameter
-# 'x0' user selected initial distribution
-# 'muSample' sample from μ(y)
-# 'M' number of samples from μ(y) to be drawn at each iteration
-# 'a' parameter for tamed Euler scheme
-# =#
-# function wgf_gaussian_mixture_tamed(N, dt, Niter, alpha, x0, muSample, M, a)
-#     # initialise a matrix x storing the particles
-#     x = zeros(Niter, N);
-#     # initial distribution is given as input:
-#     x[1, :] = x0;
-#
-#     for n=1:(Niter-1)
-#         # samples from h(y)
-#         y = sample(muSample, M, replace = true);
-#         # Compute h^N_{n}
-#         hN = zeros(M, 1);
-#         for j=1:M
-#             hN[j] = mean(pdf.(Normal.(x[n, :], 0.045), y[j]));
-#         end
-#         # gradient and drift
-#         drift = zeros(N, 1);
-#         for i=1:N
-#             gradient = pdf.(Normal.(x[n, i], 0.045), y) .* (y .- x[n, i])/(0.045^2);
-#             drift[i] = mean(gradient./hN);
-#         end
-#         # update locations
-#         x[n+1, :] = x[n, :] .+  dt * drift./(1 .+ Niter^(-a) * abs.(drift)) .+ sqrt(2*alpha*dt)*randn(N, 1);
 #     end
 #     return x
 # end

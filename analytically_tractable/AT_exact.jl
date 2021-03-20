@@ -56,8 +56,8 @@ ExactMinimiser = pdf.(Normal(0.5, sqrt(variance)), KDEx);
 # solution
 solution = rho.(KDEx);
 
-p = plot(KDEx, solution, lw = 2, label = "true density", color = :black, legendfontsize = 10, tickfontsize = 8)
+p = plot(KDEx, solution, lw = 2, label = "true density", color = :black, legendfontsize = 12, tickfontsize = 10)
 plot!(p, KDEx, ExactMinimiser, lw = 2, label = "exact minimiser", color = :red)
-plot!(p, KDEx, KDEyWGF, lw = 2, label = "WGF reconstruction", color = :blue)
+# plot!(p, KDEx, KDEyWGF, lw = 2, label = "WGF reconstruction", color = :blue)
 # savefig(p,"at_exact_min.pdf")
 # savefig(p,"at_exact_eb.pdf")

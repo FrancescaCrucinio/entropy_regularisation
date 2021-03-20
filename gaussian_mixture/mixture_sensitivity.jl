@@ -74,7 +74,7 @@ variance = zeros(length(alpha), Nrep);
 for i=1:length(alpha)
     a = alpha[i];
     for j=1:Nrep
-    x = wgf_gaussian_mixture_tamed(Nparticles, dt, Niter, a, x0, muSample, M, 0.5);
+    x = wgf_gaussian_mixture_tamed(Nparticles, dt, Niter, a, x0, muSample, M);
     # KL
     KDE, h = phi(x[Niter, :]);
     E[i, j] = psi(KDE);
@@ -87,6 +87,10 @@ end
 Eavg = mean(E, dims = 2);
 iseavg = mean(ise, dims = 2);
 varavg = mean(variance, dims = 2);
+
+p = plot(alpha, Eavg, lw = 2, label = "", legendfontsize = 12, tickfontsize = 10))
+# savefig(p,"mixture_sensitivity_E.pdf")
+
 # plot
 R"""
 
