@@ -88,24 +88,5 @@ Eavg = mean(E, dims = 2);
 iseavg = mean(ise, dims = 2);
 varavg = mean(variance, dims = 2);
 
-p = plot(alpha, Eavg, lw = 2, label = "", legendfontsize = 12, tickfontsize = 10))
+p = plot(alpha, Eavg, lw = 2, label = "", legendfontsize = 12, tickfontsize = 10)
 # savefig(p,"mixture_sensitivity_E.pdf")
-
-# plot
-R"""
-
-    library(ggplot2)
-    data <- data.frame(x = $alpha, y = $Eavg, z = $iseavg, t = $varavg)
-    p1 <- ggplot(data, aes(x, y)) +
-    geom_line(size = 1) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
-    # ggsave("mixture_sensitivity_E.eps", p1,  height=5)
-    p2 <- ggplot(data, aes(x, z)) +
-    geom_line(size = 1) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
-    # ggsave("mixture_sensitivity_ise.eps", p2,  height=5)
-    p3 <- ggplot(data, aes(x, t)) +
-    geom_line(size = 1) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
-    # ggsave("mixture_sensitivity_var.eps", p3,  height=5)
-"""
