@@ -29,24 +29,29 @@ n <- length(W);
 
 # Normal error distribution
 errortype="norm";
-varU = var(W)/4;
-sigU = sqrt(varU/2);
+varU <- var(W)/4;
+sigU <- sqrt(varU/2);
 
 # DKDE
 # Delaigle's estimators
 # KDE for mu
-h=1.06*sqrt(var(W))*n^(-1/5);
-muKDE = kde(W, h = h);
-muKDEy = muKDE$estimate;
-muKDEx = muKDE$eval.points;
-bw = muKDE$h;
+h <- 1.06*sqrt(var(W))*n^(-1/5);
+muKDE <- kde(W, h = h);
+muKDEy <- muKDE$estimate;
+muKDEx <- muKDE$eval.points;
+dx <- muKDEx[2] - muKDEx[1];
+bw <- muKDE$h;
 
-#PI bandwidth of Delaigle and Gijbels
+# DKDE-pi
 tic()
-hPI=PI_deconvUknownth4(W,errortype,varU,sigU);
-#DKDE estimator
-dx = muKDEx[2] - muKDEx[1];
-fdec_hPI = fdecUknown(muKDEx,W,hPI,errortype,sigU,dx);
+hPI <- PI_deconvUknownth4(W,errortype,varU,sigU);
+fdec_hPI <- fdecUknown(muKDEx,W,hPI,errortype,sigU,dx);
+toc()
+
+# DKDE-cv
+tic()
+hCV <- CVdeconv(W, errortype,sigU);
+fdec_hCV <- fdecUknown(muKDEx,W,hCV,errortype,sigU,dx);
 toc()
 """
 
@@ -83,19 +88,23 @@ muSample = @rget W;
 sigU = @rget sigU;
 
 # parameters for WGF
-alpha = 0.205;
+# number of particles
 Nparticles = 200;
-dt = 1e-01;
-Niter = 50000;
-M = 200;
-R"""
-# use KDE to sample initial distribution
-means <- sample(W, $Nparticles, replace = TRUE)
-initial_dist <- rnorm($Nparticles, mean = means, sd = bw)
-"""
-x0 = @rget initial_dist;
+# number of samples from μ to draw at each iteration
+M = min(Nparticles, length(muSample));
+# time discretisation
+dt = 1e-1;
+# number of iterations
+Niter = 20000;
+# initial distribution
+m0 = mean(muSample);
+sigma0 = std(muSample);
+x0 = m0 .+ sigma0*randn(1, Nparticles);
+# regularisation parameter
+alpha = 0.3;
+
 tWGF = @elapsed begin
-x = wgf_sucrase_tamed(Nparticles, dt, Niter, alpha, x0, muSample, M, 0.5, sigU);
+x = wgf_sucrase_tamed(Nparticles, dt, Niter, alpha, x0, muSample, M, sigU);
 end
 println("WGF done, $tWGF")
 
@@ -104,17 +113,8 @@ KDEyWGF = mapslices(phi, x, dims = 2);
 EWGF = mapslices(psi, KDEyWGF, dims = 2);
 plot(EWGF)
 
-# plot
-R"""
-    # WGF estimator
-    KDE_wgf <- kde($x[50000, ], eval.points = muKDEx);
-    library(ggplot2)
-    g <- rep(1:3, , each = length(muKDEx));
-    x <- rep(muKDEx, times = 3);
-    data <- data.frame(x = x, y = c(muKDEy, fdec_hPI, KDE_wgf$estimate), g = factor(g))
-    p <- ggplot(data, aes(x, y, color = g)) +
-    geom_line(size = 2) +
-    scale_color_manual(values = c("gray", "red", "blue"), labels=c(expression(paste("KDE ", mu)), "DKDEpi", "WGF")) +
-    theme(axis.title=element_blank(), text = element_text(size=20), legend.title=element_blank(), aspect.ratio = 2/3)
-    # ggsave("sucrase.eps", p, height = 4)
-"""
+
+reconstructions = [@rget(muKDEy) @rget(fdec_hPI) @rget(fdec_hCV) KDEyWGF[Niter, :]];
+p = plot(@rget(muKDEx), reconstructions, lw = 2, label = ["KDE" "DKDE-pi" "DKDE-cv" "WGF"],
+    legendfontsize = 15, tickfontsize = 10, color = [:gray :red :orange :blue])
+# savefig(p, "sucrase.pdf")

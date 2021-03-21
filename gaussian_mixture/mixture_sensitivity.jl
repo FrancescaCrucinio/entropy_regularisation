@@ -88,5 +88,5 @@ Eavg = mean(E, dims = 2);
 iseavg = mean(ise, dims = 2);
 varavg = mean(variance, dims = 2);
 
-p = plot(alpha, Eavg, lw = 2, label = "", legendfontsize = 12, tickfontsize = 10)
+p = plot(alpha, Eavg, lw = 2, label = "", legendfontsize = 15, tickfontsize = 10)
 # savefig(p,"mixture_sensitivity_E.pdf")
