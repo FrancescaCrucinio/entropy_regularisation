@@ -86,23 +86,23 @@ end
 
 # WGF
 # dt and number of iterations
-dt = 1e-02;
-Niter = 100;
+dt = 1e-03;
+Niter = 200;
 # samples from h(y)
-M = 10000;
+M = 5000;
 # number of particles
-Nparticles = 10000;
+Nparticles = 5000;
 # regularisation parameter
 # for N = 5000
-# alpha = 0.0026;
+alpha = 0.026;
 # for N = 10000
-alpha = 0.008;
+# alpha = 0.008;
 # variance of normal describing alignment
 sigma = 0.02;
 # sample from μ
 muSample = histogram2D_sampler(sinogram, phi_angle, xi, 10^6);
 
-x1, x2 = wgf_pet_tamed(Nparticles, dt, Niter, alpha, muSample, M, sigma, 0.5);
+x1, x2 = wgf_pet_tamed(Nparticles, dt, Niter, alpha, muSample, M, sigma);
 
 # KDE
 KDEyWGF = mapslices(phi, [x2 x1], dims = 2);
@@ -120,25 +120,6 @@ plot(KLWGF .- alpha * ent)
 
 KDEyWGFfinal = KDEyWGF[end, :];
 
-# plot
-R"""
-    # phantom
-    data <- data.frame(x = $KDEeval[, 1], y = $KDEeval[, 2], z = c($phantom));
-    p1 <- ggplot(data, aes(x, y)) +
-        geom_raster(aes(fill = z), interpolate=TRUE) +
-        theme_void() +
-        theme(legend.position = "none", aspect.ratio=1) +
-        scale_fill_viridis(discrete=FALSE, option="magma")
-    # ggsave("phantom.eps", p1)
-    # solution
-    data <- data.frame(x = $KDEeval[, 1], y = $KDEeval[, 2], z = $KDEyWGFfinal);
-    p2 <- ggplot(data, aes(x, y)) +
-        geom_raster(aes(fill = z), interpolate=TRUE) +
-        theme_void() +
-        theme(legend.position = "none", aspect.ratio=1) +
-        scale_fill_viridis(discrete=FALSE, option="magma")
-    # ggsave("pet.eps", p2)
-"""
 # ise
 petWGF = reshape(KDEyWGFfinal, (pixels[1], pixels[2]));
 petWGF = petWGF/maximum(petWGF);
@@ -147,14 +128,11 @@ var(petWGF .- phantom)
 rel_error = abs.(petWGF .- phantom);
 positive = phantom .> 0;
 rel_error[positive] = rel_error[positive]./phantom[positive];
-rel_error = rel_error[:];
-R"""
-    # relative error
-    data <- data.frame(x = $KDEeval[, 1], y = $KDEeval[, 2], z = $rel_error);
-    p3 <- ggplot(data, aes(x, y)) +
-        geom_raster(aes(fill = z), interpolate=TRUE) +
-        theme_void() +
-        theme(legend.position = "none", aspect.ratio=1) +
-        scale_fill_viridis(discrete=FALSE, option="magma")
-    # ggsave("pet_re.eps", p3)
-"""
+
+# plot
+p1 = heatmap(phantom, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
+# savefig(p1, "phantom.pdf")
+p2 = heatmap(petWGF, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
+# savefig(p2, "pet.pdf")
+p3 = heatmap(rel_error, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
+# savefig(p3, "pet_re.pdf")
