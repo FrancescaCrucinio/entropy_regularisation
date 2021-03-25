@@ -142,9 +142,8 @@ INPUTS
 'muSample' sample from noisy image μ(y)
 'M' number of samples from h(y) to be drawn at each iteration
 'sigma' standard deviation for Normal describing alignment
-'a' parameter for tamed Euler scheme
 =#
-function wgf_pet_tamed(N, dt, Niter, alpha, muSample, M, sigma, a)
+function wgf_pet_tamed(N, dt, Niter, alpha, muSample, M, sigma)
     # initialise two matrices x, y storing the particles
     x1 = zeros(Niter, N);
     x2 = zeros(Niter, N);
@@ -154,7 +153,7 @@ function wgf_pet_tamed(N, dt, Niter, alpha, muSample, M, sigma, a)
     x2[1, :] = x0[2, :];
     for n=1:(Niter-1)
         # get sample from μ(y)
-        muIndex = sample(1:size(muSample, 1), M, replace = true);
+        muIndex = sample(1:size(muSample, 1), M, replace = false);
         y = muSample[muIndex, :];
         # Compute h^N_{n}
         hN = zeros(M, 1);
@@ -184,8 +183,8 @@ function wgf_pet_tamed(N, dt, Niter, alpha, muSample, M, sigma, a)
         end
         # update locations
         drift_norm = sqrt.(sum([driftX1 driftX2].^2, dims = 2));
-        x1[n+1, :] = x1[n, :] .+ dt * driftX1./(1 .+ Niter^(-a) * drift_norm) .+ sqrt(2*alpha*dt)*randn(N, 1);
-        x2[n+1, :] = x2[n, :] .+ dt * driftX2./(1 .+ Niter^(-a) * drift_norm) .+ sqrt(2*alpha*dt)*randn(N, 1);
+        x1[n+1, :] = x1[n, :] .+ dt * driftX1./(1 .+ dt * drift_norm) .+ sqrt(2*alpha*dt)*randn(N, 1);
+        x2[n+1, :] = x2[n, :] .+ dt * driftX2./(1 .+ dt * drift_norm) .+ sqrt(2*alpha*dt)*randn(N, 1);
     end
     return x1, x2
 end

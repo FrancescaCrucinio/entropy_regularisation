@@ -25,18 +25,9 @@ W <- sucrase_Carter1981$Pellet;
 n <- length(W);
 
 # Laplace error distribution
-errortype="Lap";
+errortype="norm";
 varU = var(W)/4;
 sigU = sqrt(varU/2);
-
-# DKDE
-# Delaigle's estimators
-# KDE for mu
-h=1.06*sqrt(var(W))*n^(-1/5);
-muKDE = kde(W, h = h);
-muKDEy = muKDE$estimate;
-muKDEx = muKDE$eval.points;
-bw = muKDE$h;
 """
 
 a = 1;
@@ -73,21 +64,24 @@ muSample = @rget W;
 sigU = @rget sigU;
 
 # parameters for WGF
-alpha = range(0.16, stop = 0.25, length = 5);
-Nparticles = 200;
+# number of particles
+Nparticles = 500;
+# number of samples from μ to draw at each iteration
+M = min(Nparticles, length(muSample));
+# time discretisation
 dt = 1e-1;
-Niter = 50000;
-M = 200;
-R"""
-# use KDE to sample initial distribution
-means <- sample(W, $Nparticles, replace = TRUE)
-initial_dist <- rnorm($Nparticles, mean = means, sd = bw)
-"""
-x0 = @rget initial_dist;
+# number of iterations
+Niter = 20000;
+# initial distribution
+m0 = mean(muSample);
+sigma0 = std(muSample);
+x0 = m0 .+ sigma0*randn(1, Nparticles);
+# regularisation parameter
+alpha = range(0.1, stop = 0.5, length = 5);
+
 # divide muSample into groups
 L = 24;
 muSample = reshape(muSample, (L, Int(length(muSample)/L)));
-
 
 E = zeros(length(alpha), L);
 Threads.@threads for i=1:length(alpha)
@@ -95,7 +89,7 @@ Threads.@threads for i=1:length(alpha)
         # get reduced sample
         muSampleL = muSample[1:end .!= l, :];
         # WGF
-        x = wgf_sucrase_tamed(Nparticles, dt, Niter, alpha[i], x0, muSample, M, 0.5, sigU);
+        x = wgf_sucrase_tamed(Nparticles, dt, Niter, alpha[i], x0, muSample, M, sigU);
         # KL
         a = alpha[i];
         KDE = phi(x[Niter, :]);
