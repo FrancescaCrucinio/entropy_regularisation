@@ -104,10 +104,10 @@ for i=1:length(Nparticles)
 
         # SMC
         # initial distribution
-        x0SMC = rand(1, Nparticles[i]);
+        x0 = sample(muSample, Nparticles[i], replace = true);
         M = min(Nparticles[i], length(muSample));
         trepSMC[j] = @elapsed begin
-            xSMC, W = smc_gaussian_mixture(Nparticles[i], Niter, epsilon, x0SMC, muSample, M);
+            xSMC, W = smc_gaussian_mixture(Nparticles[i], Niter, epsilon, x0, muSample, M);
             # kde
             bw = sqrt(epsilon^2 + optimal_bandwidthESS(xSMC[Niter, :], W[Niter, :])^2);
             RKDESMC = rks.kde(x = xSMC[end,:], var"h" = bw, var"eval.points" = KDEx, var"w" = Nparticles[i]*W[end, :]);
@@ -118,10 +118,10 @@ for i=1:length(Nparticles)
 
         # WGF
         # initial distribution
-        x0WGF = sample(muSample, Nparticles[i], replace = true);
+        # x0WGF = sample(muSample, Nparticles[i], replace = true);
         M = min(Nparticles[i], length(muSample));
         trepWGF[j] = @elapsed begin
-        x = wgf_DKDE_tamed(Nparticles[i], dt, Niter, alpha, x0WGF, muSample, M, sdK);
+        x = wgf_DKDE_tamed(Nparticles[i], dt, Niter, alpha, x0, muSample, M, sdK);
         RKDEyWGF = rks.kde(x = x[Niter, :], var"eval.points" = KDEx);
         KDEyWGF = abs.(rcopy(RKDEyWGF[3]));
         end
