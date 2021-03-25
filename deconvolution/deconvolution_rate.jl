@@ -1,4 +1,4 @@
-push!(LOAD_PATH, "C:/Users/Francesca/Desktop/entropy_regularisation/modules")
+push!(LOAD_PATH, "C:/Users/francesca/Documents/GitHub/entropy_regularisation/modules")
 # Julia packages
 using Revise;
 using StatsPlots;
@@ -44,7 +44,7 @@ true_density = pi(KDEx);
 epsilon = 1e-3;
 alpha = 2e-2;
 # number of repetitions
-Nrep = 1;
+Nrep = 100;
 
 # diagnostics
 tPI = zeros(length(Nparticles), 1);
@@ -115,7 +115,7 @@ for i=1:length(Nparticles)
         end
         qdistrepSMC[j, :] = (true_density .- KDEySMC).^2;
         iserepSMC[j] = dx*sum(qdistrepSMC[j, :]);
-        
+
         # WGF
         # initial distribution
         x0WGF = sample(muSample, Nparticles[i], replace = true);
@@ -162,3 +162,8 @@ for i=1:length(Nparticles)
     scatter!(p, [tWGF[i]], [iseWGF[i]], xaxis = :log, color = :red,
         markerstrokecolor = :red, marker = markers[i], markersize = 5, label = "")
 end
+save("deconv_rate25Mar2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", tWGF,
+
+           "isePI", isePI,  "iseCV", iseCV, "iseSMC", iseSMC, "iseWGF", iseWGF,
+
+           "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
