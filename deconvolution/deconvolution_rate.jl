@@ -23,6 +23,10 @@ memory.limit(17000)
 # set seed
 Random.seed!(1234);
 
+function remove_non_finite(x)
+       return isfinite(x) ? x : 0
+end
+
 # data for gaussian mixture example
 pi(x) = pdf.(Normal(0.3, 0.015), x)/3 + 2*pdf.(Normal(0.5, 0.043), x)/3;
 mu(x) = 2*pdf.(Normal(0.3, sqrt(0.043^2 + 0.045^2)), x)/3 +
@@ -59,6 +63,8 @@ qdistSMC = zeros(length(KDEx), length(Nparticles));
 tWGF = zeros(length(Nparticles), 1);
 iseWGF = zeros(length(Nparticles), 1);
 qdistWGF = zeros(length(KDEx), length(Nparticles));
+entSMC = zeros(length(Nparticles), Nrep);
+entWGF = zeros(length(Nparticles), Nrep);
 
 for i=1:length(Nparticles)
     # times
@@ -115,6 +121,7 @@ for i=1:length(Nparticles)
         end
         qdistrepSMC[j, :] = (true_density .- KDEySMC).^2;
         iserepSMC[j] = dx*sum(qdistrepSMC[j, :]);
+        entSMC[i, j] = -dx*sum(remove_non_finite.(KDEySMC .* log.(KDEySMC)));
 
         # WGF
         # initial distribution
@@ -127,6 +134,7 @@ for i=1:length(Nparticles)
         end
         qdistrepWGF[j, :] = (true_density .- KDEyWGF).^2;
         iserepWGF[j] = dx*sum(qdistrepWGF[j, :]);
+        entWGF[i, j] = -dx*sum(remove_non_finite.(KDEyWGF .* log.(KDEyWGF)));
         println("$i, $j")
     end
     tPI[i] = mean(trepPI);
@@ -181,15 +189,15 @@ p = plot(bp1, bp2, bp3, bp4, legend, layout = @layout([[A B; C D] E{.15w}]), siz
 #     "isePI", isePI,  "iseCV", iseCV, "iseSMC", iseSMC, "iseWGF", iseWGF,
 #     "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
 #
-tPI = load("deconv_rate24Mar2021.jld", "tPI");
-tCV = load("deconv_rate24Mar2021.jld", "tCV");
-tSMC = load("deconv_rate24Mar2021.jld", "tSMC");
-tWGF = load("deconv_rate24Mar2021.jld", "tWGF");
-isePI = load("deconv_rate24Mar2021.jld", "isePI");
-iseCV = load("deconv_rate24Mar2021.jld", "iseCV");
-iseSMC = load("deconv_rate24Mar2021.jld", "iseSMC");
-iseWGF = load("deconv_rate24Mar2021.jld", "iseWGF");
-qdistPI = load("deconv_rate24Mar2021.jld", "qdistPI");
-qdistCV = load("deconv_rate24Mar2021.jld", "qdistCV");
-qdistSMC = load("deconv_rate24Mar2021.jld", "qdistSMC");
-qdistWGF = load("deconv_rate24Mar2021.jld", "qdistWGF");
+# tPI = load("deconv_rate24Mar2021.jld", "tPI");
+# tCV = load("deconv_rate24Mar2021.jld", "tCV");
+# tSMC = load("deconv_rate24Mar2021.jld", "tSMC");
+# tWGF = load("deconv_rate24Mar2021.jld", "tWGF");
+# isePI = load("deconv_rate24Mar2021.jld", "isePI");
+# iseCV = load("deconv_rate24Mar2021.jld", "iseCV");
+# iseSMC = load("deconv_rate24Mar2021.jld", "iseSMC");
+# iseWGF = load("deconv_rate24Mar2021.jld", "iseWGF");
+# qdistPI = load("deconv_rate24Mar2021.jld", "qdistPI");
+# qdistCV = load("deconv_rate24Mar2021.jld", "qdistCV");
+# qdistSMC = load("deconv_rate24Mar2021.jld", "qdistSMC");
+# qdistWGF = load("deconv_rate24Mar2021.jld", "qdistWGF");
