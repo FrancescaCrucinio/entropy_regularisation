@@ -9,13 +9,6 @@ using LinearAlgebra;
 using DelimitedFiles;
 using Distances;
 using KernelDensity;
-# R
-using RCall;
-R"""
-library(ggplot2)
-library(scales)
-library(viridis)
-"""
 # custom packages
 using entropy_reg;
 using samplers;
@@ -94,7 +87,7 @@ M = 5000;
 Nparticles = 5000;
 # regularisation parameter
 # for N = 5000
-alpha = 0.026;
+alpha = 0.0005;
 # for N = 10000
 # alpha = 0.008;
 # variance of normal describing alignment

@@ -7,10 +7,7 @@ using StatsBase;
 using samplers;
 
 export smc_gaussian_mixture
-export smc_AT_approximated_potential
 export optimal_bandwidthESS
-export weightedKDE
-export AT_alpha_SMC
 
 
 #= SMC for gaussian mixture exmaple

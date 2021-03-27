@@ -46,7 +46,7 @@ dx = KDEx[2] - KDEx[1];
 true_density = pi(KDEx);
 # regularisation parameters
 epsilon = 1e-3;
-alpha = 2e-2;
+alpha = 1e-1;
 # number of repetitions
 Nrep = 1;
 
@@ -172,13 +172,13 @@ for i=1:length(Nparticles)
 end
 # savefig(p, "mixture_runtime_vs_mise.pdf")
 
-bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.15, range = 0, title = "DKDE-pi")
+bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.15, range = 0, title = "DKDE-pi", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp1, "mixture_runtime_vs_mse_pi.pdf")
-bp2 = boxplot(transpose(log10.(tCV)), qdistCV, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, title = "DKDE-cv")
+bp2 = boxplot(transpose(log10.(tCV)), qdistCV, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, title = "DKDE-cv", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp2, "mixture_runtime_vs_mse_cv.pdf")
-bp3 = boxplot(transpose(log10.(tSMC)), qdistSMC, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, title = "SMC-EMS")
+bp3 = boxplot(transpose(log10.(tSMC)), qdistSMC, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, title = "SMC-EMS", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp3, "mixture_runtime_vs_mse_smc.pdf")
-bp4 = boxplot(transpose(log10.(tWGF)), qdistWGF, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, title = "WGF")
+bp4 = boxplot(transpose(log10.(tWGF)), qdistWGF, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, title = "WGF", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp4, "mixture_runtime_vs_mse_wgf.pdf")
 legend = scatter([0 0 0 0 0], showaxis = false, grid = false, label = ["N = 100" "N = 500" "N=1000" "N=5000" "N=10000"], fontsize = 15, legend = :outerright, size = (80, 400))
 scatter!(legend, [0], markercolor = :white, label = "", markerstrokecolor = :white, markersize = 10)
