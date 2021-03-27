@@ -1,4 +1,4 @@
-push!(LOAD_PATH, "C:/Users/Francesca/Desktop/entropy_regularisation/modules")
+push!(LOAD_PATH, "C:/Users/francesca/Documents/GitHub/entropy_regularisation/modules")
 # Julia packages
 using Revise;
 using StatsPlots;
@@ -48,7 +48,7 @@ true_density = pi(KDEx);
 epsilon = 1e-3;
 alpha = 1e-1;
 # number of repetitions
-Nrep = 1;
+Nrep = 100;
 
 # diagnostics
 tPI = zeros(length(Nparticles), 1);
@@ -170,7 +170,6 @@ for i=1:length(Nparticles)
     scatter!(p, [tWGF[i]], [iseWGF[i]], xaxis = :log, color = :red,
         markerstrokecolor = :red, marker = markers[i], markersize = 5, label = "")
 end
-# savefig(p, "mixture_runtime_vs_mise.pdf")
 
 bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.15, range = 0, title = "DKDE-pi", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp1, "mixture_runtime_vs_mse_pi.pdf")
