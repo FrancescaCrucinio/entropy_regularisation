@@ -80,23 +80,23 @@ end
 # WGF
 # dt and number of iterations
 dt = 1e-03;
-Niter = 200;
+Niter = 100;
 # samples from h(y)
-M = 5000;
+M = 20000;
 # number of particles
-Nparticles = 5000;
+Nparticles = 20000;
 # regularisation parameter
 # for N = 5000
-alpha = 0.0005;
+alpha = 0.00001;
 # for N = 10000
 # alpha = 0.008;
 # variance of normal describing alignment
 sigma = 0.02;
 # sample from μ
 muSample = histogram2D_sampler(sinogram, phi_angle, xi, 10^6);
-
-x1, x2 = wgf_pet_tamed(Nparticles, dt, Niter, alpha, muSample, M, sigma);
-
+runtime = @elapsed begin
+    x1, x2 = wgf_pet_tamed(Nparticles, dt, Niter, alpha, muSample, M, sigma);
+end
 # KDE
 KDEyWGF = mapslices(phi, [x2 x1], dims = 2);
 # entropy
@@ -129,3 +129,5 @@ p2 = heatmap(petWGF, color = :inferno, aspect_ratio = 1, axis = false, colorbar 
 # savefig(p2, "pet.pdf")
 p3 = heatmap(rel_error, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
 # savefig(p3, "pet_re.pdf")
+
+petWGF = petWGF/maximum(petWGF);
