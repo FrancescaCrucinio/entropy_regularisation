@@ -184,10 +184,10 @@ scatter!(legend, [0], markercolor = :white, label = "", markerstrokecolor = :whi
 # savefig(legend, "mixture_runtime_vs_mse_legend.pdf")
 p = plot(bp1, bp2, bp3, bp4, legend, layout = @layout([[A B; C D] E{.15w}]), size = (800, 500), tickfontsize = 10)
 # savefig(p, "mixture_runtime_vs_mse.pdf")
-
-# save("deconv_rate24Mar2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", tWGF,
-#     "isePI", isePI,  "iseCV", iseCV, "iseSMC", iseSMC, "iseWGF", iseWGF,
-#     "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
+save("deconv_rate28Mar2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", tWGF,
+     "isePI", isePI,  "iseCV", iseCV, "iseSMC", iseSMC, "iseWGF", iseWGF,
+     "entSMC", entSMC, "entWGF", entWGF,
+     "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
 #
 # tPI = load("deconv_rate24Mar2021.jld", "tPI");
 # tCV = load("deconv_rate24Mar2021.jld", "tCV");
