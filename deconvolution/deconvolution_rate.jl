@@ -46,7 +46,7 @@ dx = KDEx[2] - KDEx[1];
 true_density = pi(KDEx);
 # regularisation parameters
 epsilon = 1e-3;
-alpha = 2e-2;
+alpha = 1e-1;
 # number of repetitions
 Nrep = 100;
 
@@ -170,34 +170,46 @@ for i=1:length(Nparticles)
     scatter!(p, [tWGF[i]], [iseWGF[i]], xaxis = :log, color = :red,
         markerstrokecolor = :red, marker = markers[i], markersize = 5, label = "")
 end
-
-bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.15, range = 0, title = "DKDE-pi")
+# savefig(p, "mixture_runtime_vs_mise.pdf")
+bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, tickfontsize = 15)
+# title = "DKDE-pi", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp1, "mixture_runtime_vs_mse_pi.pdf")
-bp2 = boxplot(transpose(log10.(tCV)), qdistCV, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, title = "DKDE-cv")
+bp2 = boxplot(transpose(log10.(tCV)), qdistCV, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, tickfontsize = 15)
+# title = "DKDE-cv", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp2, "mixture_runtime_vs_mse_cv.pdf")
-bp3 = boxplot(transpose(log10.(tSMC)), qdistSMC, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, title = "SMC-EMS")
+bp3 = boxplot(transpose(log10.(tSMC)), qdistSMC, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, tickfontsize = 15)
+# title = "SMC-EMS", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp3, "mixture_runtime_vs_mse_smc.pdf")
-bp4 = boxplot(transpose(log10.(tWGF)), qdistWGF, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, title = "WGF")
+bp4 = boxplot(transpose(log10.(tWGF)), qdistWGF, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, tickfontsize = 15)
+# title = "WGF", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp4, "mixture_runtime_vs_mse_wgf.pdf")
-legend = scatter([0 0 0 0 0], showaxis = false, grid = false, label = ["N = 100" "N = 500" "N=1000" "N=5000" "N=10000"], fontsize = 15, legend = :outerright, size = (80, 400))
-scatter!(legend, [0], markercolor = :white, label = "", markerstrokecolor = :white, markersize = 10)
+legend = scatter([0 0 0 0 0], showaxis = false, grid = false, label = ["N = 100" "N = 500" "N=1000" "N=5000" "N=10000"],
+    markerstrokewidth = 0, markersize = 10, fontsize = 20, legend = :outertopright, size = (100, 200))
+scatter!(legend, [0], markercolor = :white, label = "", markerstrokecolor = :white, markersize = 13)
 # savefig(legend, "mixture_runtime_vs_mse_legend.pdf")
-p = plot(bp1, bp2, bp3, bp4, legend, layout = @layout([[A B; C D] E{.15w}]), size = (800, 500), tickfontsize = 10)
-# savefig(p, "mixture_runtime_vs_mse.pdf")
-save("deconv_rate28Mar2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", tWGF,
-     "isePI", isePI,  "iseCV", iseCV, "iseSMC", iseSMC, "iseWGF", iseWGF,
-     "entSMC", entSMC, "entWGF", entWGF,
-     "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
+bp = plot(bp1, bp2, bp3, bp4, legend, layout = @layout([[A B; C D] E{.15w}]), size = (900, 500), tickfontsize = 10)
+# savefig(bp, "mixture_runtime_vs_mse.pdf")
+
+# save("deconv_rate28Mar2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", tWGF,
+#      "isePI", isePI,  "iseCV", iseCV, "iseSMC", iseSMC, "iseWGF", iseWGF,
+#      "entSMC", entSMC, "entWGF", entWGF,
+#      "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
 #
-# tPI = load("deconv_rate24Mar2021.jld", "tPI");
-# tCV = load("deconv_rate24Mar2021.jld", "tCV");
-# tSMC = load("deconv_rate24Mar2021.jld", "tSMC");
-# tWGF = load("deconv_rate24Mar2021.jld", "tWGF");
-# isePI = load("deconv_rate24Mar2021.jld", "isePI");
-# iseCV = load("deconv_rate24Mar2021.jld", "iseCV");
-# iseSMC = load("deconv_rate24Mar2021.jld", "iseSMC");
-# iseWGF = load("deconv_rate24Mar2021.jld", "iseWGF");
-# qdistPI = load("deconv_rate24Mar2021.jld", "qdistPI");
-# qdistCV = load("deconv_rate24Mar2021.jld", "qdistCV");
-# qdistSMC = load("deconv_rate24Mar2021.jld", "qdistSMC");
-# qdistWGF = load("deconv_rate24Mar2021.jld", "qdistWGF");
+tPI = load("deconv_rate28Mar2021.jld", "tPI");
+tCV = load("deconv_rate28Mar2021.jld", "tCV");
+tSMC = load("deconv_rate28Mar2021.jld", "tSMC");
+tWGF = load("deconv_rate28Mar2021.jld", "tWGF");
+isePI = load("deconv_rate28Mar2021.jld", "isePI");
+iseCV = load("deconv_rate28Mar2021.jld", "iseCV");
+iseSMC = load("deconv_rate28Mar2021.jld", "iseSMC");
+iseWGF = load("deconv_rate28Mar2021.jld", "iseWGF");
+qdistPI = load("deconv_rate28Mar2021.jld", "qdistPI");
+qdistCV = load("deconv_rate28Mar2021.jld", "qdistCV");
+qdistSMC = load("deconv_rate28Mar2021.jld", "qdistSMC");
+qdistWGF = load("deconv_rate28Mar2021.jld", "qdistWGF");
+entSMC = load("deconv_rate28Mar2021.jld", "entSMC");
+entWGF = load("deconv_rate28Mar2021.jld", "entWGF");
+
+i = 3
+histogram(entWGF[i, :])
+histogram!(entSMC[i, :])
