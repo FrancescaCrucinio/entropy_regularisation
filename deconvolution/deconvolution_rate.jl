@@ -195,20 +195,20 @@ save("deconv_rate10Apr2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", 
      "entSMC", entSMC, "entWGF", entWGF,
      "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
 
-# tPI = load("deconv_rate28Mar2021.jld", "tPI");
-# tCV = load("deconv_rate28Mar2021.jld", "tCV");
-# tSMC = load("deconv_rate28Mar2021.jld", "tSMC");
-# tWGF = load("deconv_rate28Mar2021.jld", "tWGF");
-# isePI = load("deconv_rate28Mar2021.jld", "isePI");
-# iseCV = load("deconv_rate28Mar2021.jld", "iseCV");
-# iseSMC = load("deconv_rate28Mar2021.jld", "iseSMC");
-# iseWGF = load("deconv_rate28Mar2021.jld", "iseWGF");
-# qdistPI = load("deconv_rate28Mar2021.jld", "qdistPI");
-# qdistCV = load("deconv_rate28Mar2021.jld", "qdistCV");
-# qdistSMC = load("deconv_rate28Mar2021.jld", "qdistSMC");
-# qdistWGF = load("deconv_rate28Mar2021.jld", "qdistWGF");
-# entSMC = load("deconv_rate28Mar2021.jld", "entSMC");
-# entWGF = load("deconv_rate28Mar2021.jld", "entWGF");
+# tPI = load("deconv_rate10Apr2021.jld", "tPI");
+# tCV = load("deconv_rate10Apr2021.jld", "tCV");
+# tSMC = load("deconv_rate10Apr2021.jld", "tSMC");
+# tWGF = load("deconv_rate10Apr2021.jld", "tWGF");
+# isePI = load("deconv_rate10Apr2021.jld", "isePI");
+# iseCV = load("deconv_rate10Apr2021.jld", "iseCV");
+# iseSMC = load("deconv_rate10Apr2021.jld", "iseSMC");
+# iseWGF = load("deconv_rate10Apr2021.jld", "iseWGF");
+# qdistPI = load("deconv_rate10Apr2021.jld", "qdistPI");
+# qdistCV = load("deconv_rate10Apr2021.jld", "qdistCV");
+# qdistSMC = load("deconv_rate10Apr2021.jld", "qdistSMC");
+# qdistWGF = load("deconv_rate10Apr2021.jld", "qdistWGF");
+# entSMC = load("deconv_rate10Apr2021.jld", "entSMC");
+# entWGF = load("deconv_rate10Apr2021.jld", "entWGF");
 
 i = 3
 histogram(entWGF[i, :])

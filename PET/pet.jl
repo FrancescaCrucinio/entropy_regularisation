@@ -82,9 +82,9 @@ end
 dt = 1e-02;
 Niter = 100;
 # samples from h(y)
-M = 20000;
+M = 2000;
 # number of particles
-Nparticles = 20000;
+Nparticles = 2000;
 # regularisation parameter
 # matching smcems entropy
 alpha = 0.01;

@@ -173,13 +173,8 @@ function wgf_pet_tamed(N, dt, Niter, alpha, muSample, M, sigma)
                     x2[n, i] * sin.(y[:, 1]) .- y[:, 2])/sigma^2;
             gradientX1 = prec .* cos.(y[:, 1]);
             gradientX2 = prec .* sin.(y[:, 1]);
-            # keep only finite elements
-            g1h = gradientX1./hN;
-            g2h = gradientX2./hN;
-            g1h[(!).(isfinite.(g1h))] .= 0;
-            g2h[(!).(isfinite.(g2h))] .= 0;
-            driftX1[i] = mean(g1h);
-            driftX2[i] = mean(g2h);
+            driftX1[i] = mean(gradientX1./hN);
+            driftX2[i] = mean(gradientX2./hN);
         end
         # update locations
         drift_norm = sqrt.(sum([driftX1 driftX2].^2, dims = 2));
