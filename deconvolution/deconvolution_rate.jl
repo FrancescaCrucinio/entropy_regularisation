@@ -8,8 +8,8 @@ using Statistics;
 using StatsBase;
 using Random;
 using Distances;
-using RCall;
 using JLD;
+using RCall;
 @rimport ks as rks;
 # custom packages
 using entropy_reg;
@@ -171,16 +171,16 @@ for i=1:length(Nparticles)
         markerstrokecolor = :red, marker = markers[i], markersize = 5, label = "")
 end
 # savefig(p, "mixture_runtime_vs_mise.pdf")
-bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, tickfontsize = 15)
+bp1 = boxplot(transpose(log10.(tPI)), qdistPI, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, tickfontsize = 15, ylims = (0.5*minimum(qdistSMC), maximum(qdistWGF)))
 # title = "DKDE-pi", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp1, "mixture_runtime_vs_mse_pi.pdf")
-bp2 = boxplot(transpose(log10.(tCV)), qdistCV, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, tickfontsize = 15)
+bp2 = boxplot(transpose(log10.(tCV)), qdistCV, yaxis = :log10, legend = :none, bar_width = 0.2, range = 0, tickfontsize = 15, ylims = (0.5*minimum(qdistSMC), maximum(qdistWGF)))
 # title = "DKDE-cv", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp2, "mixture_runtime_vs_mse_cv.pdf")
-bp3 = boxplot(transpose(log10.(tSMC)), qdistSMC, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, tickfontsize = 15)
+bp3 = boxplot(transpose(log10.(tSMC)), qdistSMC, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, tickfontsize = 15, ylims = (0.5*minimum(qdistSMC), maximum(qdistWGF)))
 # title = "SMC-EMS", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp3, "mixture_runtime_vs_mse_smc.pdf")
-bp4 = boxplot(transpose(log10.(tWGF)), qdistWGF, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, tickfontsize = 15)
+bp4 = boxplot(transpose(log10.(tWGF)), qdistWGF, yaxis = :log10, legend = :none, bar_width = 0.3, range = 0, tickfontsize = 15, ylims = (0.5*minimum(qdistSMC), maximum(qdistWGF)))
 # title = "WGF", ylabel = "MSE", xlabel = "Runtime (log s)")
 # savefig(bp4, "mixture_runtime_vs_mse_wgf.pdf")
 legend = scatter([0 0 0 0 0], showaxis = false, grid = false, label = ["N = 100" "N = 500" "N=1000" "N=5000" "N=10000"],
@@ -195,20 +195,20 @@ save("deconv_rate10Apr2021.jld", "tPI", tPI,  "tCV", tCV, "tSMC", tSMC, "tWGF", 
      "entSMC", entSMC, "entWGF", entWGF,
      "qdistPI", qdistPI,  "qdistCV", qdistCV, "qdistSMC", qdistSMC, "qdistWGF", qdistWGF);
 
-# tPI = load("deconv_rate10Apr2021.jld", "tPI");
-# tCV = load("deconv_rate10Apr2021.jld", "tCV");
-# tSMC = load("deconv_rate10Apr2021.jld", "tSMC");
-# tWGF = load("deconv_rate10Apr2021.jld", "tWGF");
-# isePI = load("deconv_rate10Apr2021.jld", "isePI");
-# iseCV = load("deconv_rate10Apr2021.jld", "iseCV");
-# iseSMC = load("deconv_rate10Apr2021.jld", "iseSMC");
-# iseWGF = load("deconv_rate10Apr2021.jld", "iseWGF");
-# qdistPI = load("deconv_rate10Apr2021.jld", "qdistPI");
-# qdistCV = load("deconv_rate10Apr2021.jld", "qdistCV");
-# qdistSMC = load("deconv_rate10Apr2021.jld", "qdistSMC");
-# qdistWGF = load("deconv_rate10Apr2021.jld", "qdistWGF");
-# entSMC = load("deconv_rate10Apr2021.jld", "entSMC");
-# entWGF = load("deconv_rate10Apr2021.jld", "entWGF");
+tPI = load("deconv_rate10Apr2021.jld", "tPI");
+tCV = load("deconv_rate10Apr2021.jld", "tCV");
+tSMC = load("deconv_rate10Apr2021.jld", "tSMC");
+tWGF = load("deconv_rate10Apr2021.jld", "tWGF");
+isePI = load("deconv_rate10Apr2021.jld", "isePI");
+iseCV = load("deconv_rate10Apr2021.jld", "iseCV");
+iseSMC = load("deconv_rate10Apr2021.jld", "iseSMC");
+iseWGF = load("deconv_rate10Apr2021.jld", "iseWGF");
+qdistPI = load("deconv_rate10Apr2021.jld", "qdistPI");
+qdistCV = load("deconv_rate10Apr2021.jld", "qdistCV");
+qdistSMC = load("deconv_rate10Apr2021.jld", "qdistSMC");
+qdistWGF = load("deconv_rate10Apr2021.jld", "qdistWGF");
+entSMC = load("deconv_rate10Apr2021.jld", "entSMC");
+entWGF = load("deconv_rate10Apr2021.jld", "entWGF");
 
 i = 3
 histogram(entWGF[i, :])
