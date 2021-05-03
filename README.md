@@ -2,7 +2,7 @@
 
 A Wasserstein gradient flow approach to Fredholm Equations of the First Kind
 
-This repository provides Julia code to reproduce the examples of 
+This repository provides Julia code to reproduce the examples of Chapter 7 of the PhD thesis "Some Interacting Particle Methodswith Non-Standard Interactions".
 
 The folder `analytically_tractable` contains code to reproduce the example in Section 7.4.1.
 
