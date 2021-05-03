@@ -82,12 +82,14 @@ end
 dt = 1e-02;
 Niter = 100;
 # samples from h(y)
-M = 2000;
+M = 20000;
 # number of particles
-Nparticles = 2000;
+Nparticles = 20000;
 # regularisation parameter
 # matching smcems entropy
 alpha = 0.01;
+# cross validation
+# alpha = 1e-04;
 # variance of normal describing alignment
 sigma = 0.02;
 # sample from μ
@@ -102,7 +104,7 @@ ent = mapslices(psi_ent, KDEyWGF, dims = 2);
 # KL
 KLWGF = mapslices(psi_kl, KDEyWGF, dims = 2);
 
-# plot
+# check convergence
 plot(KLWGF)
 phantom_ent = psi_ent(phantom);
 plot(ent)
@@ -124,6 +126,6 @@ rel_error[positive] = rel_error[positive]./phantom[positive];
 p1 = heatmap(phantom, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
 # savefig(p1, "phantom.pdf")
 p2 = heatmap(petWGF, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
-# savefig(p2, "pet.pdf")
+# savefig(p2, "pet_cv.pdf")
 p3 = heatmap(rel_error, color = :inferno, aspect_ratio = 1, axis = false, colorbar = false, size=(600, 600));
-# savefig(p3, "pet_re.pdf")
+# savefig(p3, "pet_cv_re.pdf")

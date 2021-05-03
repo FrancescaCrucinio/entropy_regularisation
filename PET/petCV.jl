@@ -90,8 +90,8 @@ L = 10;
 
 ent = zeros(length(alpha), L);
 kl = zeros(length(alpha), L);
-for i=1:length(alpha)
-    for l=1:L
+Threads.@threads for i=1:length(alpha)
+    @simd for l=1:L
         # get reduced sample
         muSampleL = muSample[setdiff(1:10^6, Tuple(((1:10^5) .+ (l-1)*10^5))), :];
         # WGF
